@@ -11,9 +11,35 @@ int main(int argc, char *argv[])
     bool quit=false;
     SDL_Event event;
     SDL_Point point;
+     //声明表面
+    SDL_Surface* hello = NULL;
+    SDL_Texture* pTexture = NULL;
 
     SDL_SetRenderDrawColor(renderer,255,255,255,255);
     while(!quit){
+         Uint32 c_red = 0xffffffff;
+         SDL_Rect rect = {0,0,20,20};
+         
+         SDL_RenderFillRect(renderer, &rect); // 画圆，圆心（50，50） 半径50
+          //加载图像
+    hello = SDL_LoadBMP( "ic_launcher.bmp" );
+    //使用SDL_Surface创建Texture
+	pTexture = SDL_CreateTextureFromSurface(renderer, hello);
+    SDL_Rect *srcRect = malloc(sizeof(SDL_Rect));
+    SDL_Rect *dstRect = malloc(sizeof(SDL_Rect));
+    srcRect->x=0;
+    srcRect->y = 0;
+    srcRect->w = 140;
+    srcRect->h = 140;
+    dstRect->x=0;
+    dstRect->y = 0;
+    dstRect->w = 140;
+    dstRect->h = 140;
+    SDL_RenderCopy(renderer, pTexture, srcRect, dstRect);
+    //将图像应用到窗口上
+    // SDL_BlitSurface( hello, NULL, renderer, NULL );
+    //更新Render显示
+	SDL_RenderPresent(renderer);
         while(SDL_PollEvent(&event)){
             switch(event.type){
                 case SDL_QUIT:
@@ -22,6 +48,7 @@ int main(int argc, char *argv[])
                 case SDL_MOUSEMOTION:
                     if(isDown){
                     SDL_RenderDrawLine(renderer,point.x,point.y,event.motion.x,event.motion.y);
+                    
                     point.x=event.motion.x;
                     point.y=event.motion.y;
                     }
