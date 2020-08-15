@@ -155,6 +155,7 @@ int main(int argc, char *argv[])
             switch (e.type)
             {
             case SDL_QUIT:
+                exitApp();
                 quit = true;
                 break;
             case SDL_MOUSEMOTION:

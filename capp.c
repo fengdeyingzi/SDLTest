@@ -6,6 +6,17 @@
 bool isDown = false;
 int point_x=0, point_y=0;
 _FNT *fnt = NULL;
+int timer = 0;
+int number = 0;
+
+void logoc(int data){
+    cls(20,20,20);
+    char text[300];
+    sprintf(text,"%d\n",number++);
+    fnt_drawline(fnt,text,10,10);
+    ref(0,0,300,300);
+}
+
 int init()
 {
     cls(20, 20, 20);
@@ -20,14 +31,17 @@ int time = getuptime();
     // fnt_draw(fnt,33,30,30);
     fnt_draw(fnt,(int)'a',50,30);
     
-    fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,0);
+    fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
+    
     // drawBitmap(fnt->bitmap,0,0);
     printf("耗时：%dms\n",getuptime()-time);
     ref(0,0,SCRW,SCRH);
     // 
-    fnt_free(fnt);
+    // fnt_free(fnt);
+    timer = timercreate();
+    timerstart(timer, 1000, 1, logoc, 1);
+    ref(0,0,SCRW,SCRH);
 
-    ref(0, 0, 300, 300);
 }
 
 int event(int type, int p1, int p2)
@@ -63,4 +77,10 @@ int pause(void)
 int resume(void)
 {
     return 0;
+}
+
+int exitApp(void){
+    fnt_free(fnt);
+    timerstop(timer);
+    timerdel(timer);
 }

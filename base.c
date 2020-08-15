@@ -8,6 +8,22 @@
 #include <time.h> //时间
 static SDL_Renderer *renderer;
 static SDL_Window *window;
+
+typedef struct MRC_TIMER {
+    int32 time;    //定时器时长
+    int32 uptime;  //剩余时间(无效)
+    uint32 starttime; //定时器创建时间(无效)
+    int32 data;  //data数据
+    mrc_timerCB timerCB;  //回调函数
+    int32 loop;  //是否循环
+    int32 isrun;  //是否在运行(无效，被runnable取代)
+    struct MRC_TIMER *next;  //指向下一个定时器
+    int32 isStop;
+    SDL_TimerID timerId;
+    SDL_TimerCallback callback;
+} _TIMER;
+
+
 //初始化
 void base_init( SDL_Window *win, SDL_Renderer *render){
     renderer = render;
@@ -91,3 +107,44 @@ unsigned int getuptime(){
 
 }
 
+int timercreate(){
+    _TIMER *timer = (_TIMER *)malloc(sizeof(_TIMER));
+    memset(timer,0, sizeof(_TIMER));
+    return (int)timer;
+}
+
+Uint32 capp_timerRun(Uint32 interval, void *param)
+{
+    printf("this is timer\n");
+    _TIMER *timer = (_TIMER *)param;
+
+    if(!timer->loop){
+SDL_RemoveTimer(timer->timerId);
+    }
+    timer->timerCB(timer->data);
+
+    return interval;
+}
+
+int timerstart(int t, int time, int data, mrc_timerCB timerCB, int loop){
+    _TIMER *timer = (_TIMER *)t;
+    timer->data = data;
+    timer->loop = loop;
+    timer->isrun = 1;
+    timer->timerCB = timerCB;
+    timer->timerId = SDL_AddTimer(time, capp_timerRun ,timer);
+    return 0;
+}
+
+int timerstop(int t){
+    _TIMER *timer = (_TIMER *)t;
+    timer->isStop = 1;
+    SDL_RemoveTimer(timer->timerId);
+}
+
+int timerdel(int t){
+    _TIMER *timer = (_TIMER *)t;
+    if(!timer->isStop)
+    SDL_RemoveTimer(timer->timerId);
+    free(timer);
+}

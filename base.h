@@ -101,6 +101,8 @@ typedef struct
     uint8 b;
 } colorst;
 
+typedef void (*mrc_timerCB)(int data);
+
 void base_init( SDL_Window *win, SDL_Renderer *render);
 
 //请屏
@@ -112,4 +114,10 @@ void ref(int x,int y,int w,int h);
 void capp_exit();
 int getlen(const char* filename);
 int wstrlen(const char * txt);
+int timercreate();
+int timerstart(int t, int time, int data, mrc_timerCB timerCB, int loop);
+int timerstop(int t);
+int timerdel(int t);
+
+
 #endif
