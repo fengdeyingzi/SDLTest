@@ -17,8 +17,16 @@
                 "-o",
                 "${workspaceFolder}\\main.exe",
                 "-lmingw32",
+                "-llibfreetype-6",
+                "-lzlib1",
+                "-llibwebp-7",
+                "-llibtiff-5",
+                "-llibpng16-16",
+                "-llibjpeg-9",
                 "-lSDL2main",
                 "-lSDL2",
+                "-lSDL2_ttf",
+                "-lSDL2_image",
                 "-mwindows"
             ],
             "options": {
@@ -45,6 +53,8 @@
                 "-lmingw32",
                 "-lSDL2main",
                 "-lSDL2",
+                "-lSDL2_ttf",
+                "-lSDL2_image",
                 "-mwindows"
             ],
             "options": {

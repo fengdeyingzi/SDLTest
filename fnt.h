@@ -190,7 +190,7 @@ void *fnt_create(char *imgname, char *fntname)
                 if (strncmp(key, "id", 2) == 0)
                 {
                     font->id = atoi(value);
-                    printf("id:%d\n", font->id);
+                    // printf("id:%d\n", font->id);
                 }
                 if (strncmp(key, "x=", 2) == 0)
                 {

@@ -1,4 +1,6 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -62,6 +64,11 @@ void drawpoly(SDL_Renderer *renderer, float x, float y, int n, float r)
 int main(int argc, char *argv[])
 {
     printf("start\n");
+    //初始化所有SDL子系统
+    if( SDL_Init( SDL_INIT_EVERYTHING ) == -1 )
+    {
+        return -1;    
+    }
     SDL_Window *window = SDL_CreateWindow("SDL测试 - 风的影子", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
     SDL_Surface *surface = NULL;
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -76,7 +83,7 @@ int main(int argc, char *argv[])
     surface = SDL_GetWindowSurface(window);
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     base_init(window, renderer);
-    setDrawRenderer(renderer);
+    graphics_init(renderer);
     init(); //调用CAPP的init函数
     // while (!quit)
     // {

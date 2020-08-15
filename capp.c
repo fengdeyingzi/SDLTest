@@ -12,27 +12,28 @@ int number = 0;
 void logoc(int data){
     cls(20,20,20);
     char text[300];
-    sprintf(text,"%d\n",number++);
-    fnt_drawline(fnt,text,10,10);
+    sprintf(text,"定时器 运行第%d次\n", ++number);
+    drawText(text, 100,300, 2, 0xff30ff30);
+    // fnt_drawline(fnt,text,10,10);
     ref(0,0,300,300);
 }
 
 int init()
 {
-    cls(20, 20, 20);
+    cls(60, 60, 60);
     // drawCircle(0, 0, 30, 0xff30f0f0);
-    int bmp = readBitmap("ic_launcher.bmp");
+    int bmp = readBitmapFromAssets("ic_launcher.png");
     // drawBitmapFlip(bmp, 30, 30,50,140,0,0);
 // drawLine(point_x, point_y, 30, 30, 0xff202020);
 
 int time = getuptime();
-    fnt = fnt_create("font.bmp", "font.fnt");
+    fnt = fnt_create("font.png", "font.fnt");
     printf(" fnt = %d\n",(int)fnt);
     // fnt_draw(fnt,33,30,30);
-    fnt_draw(fnt,(int)'a',50,30);
+    // fnt_draw(fnt,(int)'a',50,30);
     
     fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
-    
+    // drawText("测试", 30,30, 1, 0xff30ff30);
     // drawBitmap(fnt->bitmap,0,0);
     printf("耗时：%dms\n",getuptime()-time);
     ref(0,0,SCRW,SCRH);

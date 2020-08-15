@@ -4,6 +4,8 @@ SDL 实现手机C的graphics.h
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,9 +28,9 @@ typedef struct{
 
 
 int createBitmap(int w, int h);
-
+void graphics_init(SDL_Renderer *render);
 void setDrawRenderer(SDL_Renderer *render);
-
+void drawText(char *text, int x, int y, int font_type, unsigned int color);
 int readBitmap(char *filename);
 int readBitmapFromAssets(char *filename);
 void drawBitmap(int bmp, int x,int y);
