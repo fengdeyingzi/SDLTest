@@ -193,3 +193,13 @@ void drawLine(int x1, int y1, int x2, int y2, unsigned int color)
     SDL_SetRenderDrawColor(renderer, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
     SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 }
+
+void graphics_free(){
+    int i=0;
+    //关闭用过的字体
+    for(i=0;i<3;i++)
+    TTF_CloseFont( fonts[i] );
+    
+    //退出SDL_ttf
+    TTF_Quit();
+}

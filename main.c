@@ -70,17 +70,15 @@ int main(int argc, char *argv[])
         return -1;    
     }
     SDL_Window *window = SDL_CreateWindow("SDL测试 - 风的影子", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
-    SDL_Surface *surface = NULL;
+    // SDL_Surface *surface = NULL;
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     
     bool quit = false;
     SDL_Event e;
     SDL_Point point;
-    //声明表面
-    SDL_Surface *hello = NULL;
-    SDL_Texture *pTexture = NULL;
+    
     //接下来是获取窗口的屏幕 这样才能绘制
-    surface = SDL_GetWindowSurface(window);
+    // surface = SDL_GetWindowSurface(window);
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     base_init(window, renderer);
     graphics_init(renderer);
@@ -153,8 +151,7 @@ int main(int argc, char *argv[])
     // }
 
 
-    // SDL_DestroyWindow(window);
-    // SDL_DestroyRenderer(renderer);
+
     while (!quit)
     {
         while (SDL_PollEvent(&e))
@@ -182,6 +179,9 @@ int main(int argc, char *argv[])
         // SDL_UpdateWindowSurface(window);
         // SDL_Delay(1000 / 60);
     }
+    graphics_free();
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
 
 
 return 0;
