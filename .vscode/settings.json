@@ -3,6 +3,9 @@
         "*.cjson": "jsonc",
         "*.wxss": "css",
         "*.wxs": "javascript",
-        "sdl.h": "c"
-    }
+        "sdl.h": "c",
+        "stat.h": "c",
+        "base.h": "c",
+        "time.h": "c"
+    },
 }
