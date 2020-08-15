@@ -3,14 +3,13 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "g",
+            "label": "sdl",
             
             "command": "E:\\app\\C-free\\mingw\\bin\\gcc.exe",
             "args": [
-                "-g",
-                "${file}",
+                "${workspaceFolder}\\main.c",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${workspaceFolder}\\${fileBasenameNoExtension}.exe",
                 "-lmingw32",
                 "-lSDL2main",
                 "-lSDL2",
