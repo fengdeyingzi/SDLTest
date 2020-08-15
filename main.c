@@ -2,8 +2,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-extern void drawImgEx(SDL_Surface *screen, char *file, int x, int y, int bx,int by,int bw,int bh);
-
+extern void drawImgEx(SDL_Renderer *renderer, char *file, int x, int y, int bx,int by,int bw,int bh);
+extern void drawCircle(SDL_Renderer *renderer, SDL_Color *color, int x0, int y0, int r);
+extern void drawRect(SDL_Renderer *renderer, int x, int y, int w, int h);
+extern void drawLine(SDL_Renderer *renderer, int x1, int y1, int x2, int y2);
+extern void drawPoint(SDL_Renderer *renderer, int x,int y);
+extern Uint32 SDLColorToColor(SDL_Surface *screen,SDL_Color* sdl_color);
+extern Uint32 get_pixel(SDL_Surface *surface, int x, int y);
+extern void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 int isDown = 0;
 int main(int argc, char *argv[])
 {
@@ -40,11 +46,13 @@ int main(int argc, char *argv[])
         dstRect->w = 140;
         dstRect->h = 140;
         SDL_RenderCopy(renderer, pTexture, srcRect, dstRect);
+        SDL_Color color = {255,255,255,255};
+        drawCircle(renderer, &color, 200,200, 50);
+        drawLine(renderer,0,0,500,500);
         //将图像应用到窗口上
         // SDL_BlitSurface( hello, NULL, renderer, NULL );
-        //更新Render显示
-        SDL_RenderPresent(renderer);
-        drawImgEx(surface, "ic_launcher.bmp", 200,0,0,0,100,100);
+        
+        drawImgEx(renderer, "ic_launcher.bmp", 200,0,0,0,100,100);
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -73,7 +81,7 @@ int main(int argc, char *argv[])
         }
         SDL_RenderPresent(renderer);
         //更新窗口操作
-        SDL_UpdateWindowSurface(window);
+        // SDL_UpdateWindowSurface(window);
         SDL_Delay(1000 / 60);
     }
     SDL_DestroyWindow(window);
@@ -116,11 +124,27 @@ void apply_surface( int x, int y, SDL_Surface* source, SDL_Surface* destination,
 }
 
 //图片裁剪绘制
-void drawImgEx(SDL_Surface *screen, char *file, int x, int y, int bx,int by,int bw,int bh){
-     SDL_Surface *hello = NULL;
-     hello = SDL_LoadBMP(file);
-     SDL_Rect clip = {bx,by,bw,bh};
-     apply_surface(x, y, hello, screen, &clip);
+void drawImgEx(SDL_Renderer *renderer, char *file, int x, int y, int bx,int by,int bw,int bh){
+    //  SDL_Surface *hello = NULL;
+    //  hello = SDL_LoadBMP(file);
+    //  SDL_Rect clip = {bx,by,bw,bh};
+    //  apply_surface(x, y, hello, screen, &clip);
+        SDL_Surface *hello = NULL;
+    SDL_Texture *pTexture = NULL;
+    hello = SDL_LoadBMP(file);
+    //使用SDL_Surface创建Texture
+    pTexture = SDL_CreateTextureFromSurface(renderer, hello);
+    SDL_Rect *srcRect = malloc(sizeof(SDL_Rect));
+    SDL_Rect *dstRect = malloc(sizeof(SDL_Rect));
+    srcRect->x = bx;
+    srcRect->y = by;
+    srcRect->w = bw;
+    srcRect->h = bh;
+    dstRect->x = x;
+    dstRect->y = y;
+    dstRect->w = bw;
+    dstRect->h = bh;
+    SDL_RenderCopy(renderer, pTexture, srcRect, dstRect);
 }
 
 //画圆
@@ -176,3 +200,96 @@ void drawPoint(SDL_Renderer *renderer, int x,int y){
     SDL_RenderDrawPoint(renderer, x, y);
 }
 //画文字
+
+
+
+/**
+ * Name : SDLColorToColor
+ *
+ * Change from an "SDL_Color" to an Uint32
+ * sdl_color input SDL_Color Color
+ * return Uint32 Color
+ */
+Uint32 SDLColorToColor(SDL_Surface *screen,SDL_Color* sdl_color)
+{
+	return  SDL_MapRGB(screen->format, sdl_color->r, sdl_color->g, sdl_color->b);
+}
+ 
+/*
+ * Return the pixel value at (x, y) 获取像素
+ * NOTE: The surface must be locked before calling this!
+ */
+Uint32 get_pixel(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+ 
+    switch(bpp) {
+    case 1:
+        return *p;
+ 
+    case 2:
+        return *(Uint16 *)p;
+ 
+    case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+ 
+    case 4:
+        return *(Uint32 *)p;
+ 
+    default:
+        return 0;       /* shouldn't happen, but avoids warnings */
+    }
+}
+ 
+/*
+ * Set the pixel at (x, y) to the given value 设置像素
+ * NOTE: The surface must be locked before calling this!
+ */
+void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    switch (surface->format->BytesPerPixel)
+  	{
+    	case 1: // Assuming 8-bpp
+    	{
+      		Uint8 *bufp;
+      		bufp = (Uint8 *)surface->pixels + y*surface->pitch + x;
+      		*bufp = pixel;
+    	}
+    	break;
+    	case 2: // Probably 15-bpp or 16-bpp
+    	{
+      		Uint16 *bufp;
+      		bufp = (Uint16 *)surface->pixels + y*surface->pitch/2 + x;
+      		*bufp = pixel;
+    	}
+    	break;
+    	case 3: // Slow 24-bpp mode, usually not used
+    	{
+      		Uint8 *bufp;
+      		bufp = (Uint8 *)surface->pixels + y*surface->pitch + x * 3;
+      		if(SDL_BYTEORDER == SDL_LIL_ENDIAN)
+      		{
+        		bufp[0] = pixel;
+        		bufp[1] = pixel >> 8;
+        		bufp[2] = pixel >> 16;
+      		} else {
+        		bufp[2] = pixel;
+        		bufp[1] = pixel >> 8;
+        		bufp[0] = pixel >> 16;
+      		}
+    	}
+    	break;
+    	case 4: // Probably 32-bpp
+    	{
+      		Uint32 *bufp;
+      		bufp = (Uint32 *)surface->pixels + y*surface->pitch/4 + x;
+      		*bufp = pixel;
+    	}
+    	break;
+  	}
+}
