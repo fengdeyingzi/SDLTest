@@ -4,7 +4,7 @@
 #include "graphics.h"
 #include <fcntl.h>
 #include <sys/stat.h>
-#include <sys/time.h>
+// #include <sys/time.h>
 // #undef BITMAPINFO
 #include <windows.h>
 
@@ -183,7 +183,8 @@ int dtextright(char *pcText, int x,int y, rectst *rect, colorst *color, int is_u
 }
 
 void sleep(int ms){
-    Sleep(ms);
+    // Sleep(ms);
+    SDL_Delay(ms);
 }
 
 int shake(int ms){

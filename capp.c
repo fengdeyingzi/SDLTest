@@ -24,6 +24,8 @@ int init()
     cls(60, 60, 60);
     // drawCircle(0, 0, 30, 0xff30f0f0);
     int bmp = readBitmapFromAssets("ic_launcher.png");
+    int new_bmp = clipBitmap(bmp,0,0,50,140);
+    
     // drawBitmapFlip(bmp, 30, 30,50,140,0,0);
 // drawLine(point_x, point_y, 30, 30, 0xff202020);
 
@@ -46,7 +48,9 @@ int time = getuptime();
     drawTextEx("测试 test test test test test \n测试\n", 0, 290, &rect, 0xfff0f0f0, 0, 1);
     rectst rect2 = {30,80,300,300};
     drawTextEx("测试 test test test test test \n测试\n", 30, 300, &rect2, 0xfff0f0f0, 0, 1);
-    // timerstart(timer, 1000, 1, logoc, 1);
+    timerstart(timer, 1000, 1, logoc, 1);
+    // drawBitmap(bmp,0,0);
+    drawBitmap(new_bmp, 0, 0);
     ref(0,0,SCRW,SCRH);
 
 }
