@@ -14,3 +14,6 @@ void *readFileFromAssets(char *filename, int *len){
     return buf;
 }
 
+void toast(char *text, int type){
+    
+}

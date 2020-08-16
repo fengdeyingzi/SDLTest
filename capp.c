@@ -13,7 +13,7 @@ void logoc(int data){
     cls(20,20,20);
     char text[300];
     sprintf(text,"定时器 运行第%d次\n", ++number);
-    drawText(text, 100,300, 2, 0xff30ff30);
+    drawText(text, 100,300, 0, 0xff30ff30);
     // fnt_drawline(fnt,text,10,10);
     ref(0,0,300,300);
 }

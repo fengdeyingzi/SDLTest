@@ -24,7 +24,7 @@ typedef struct{
     unsigned int format;
     unsigned int flags;
     void *ptr;
-} BITMAPINFO;
+} _BITMAPINFO;
 
 
 int createBitmap(int w, int h);
@@ -44,6 +44,7 @@ void bitmapFree(int bmp);
 void drawRect(int x, int y, int w, int h, unsigned int color);
 
 void drawCircle(int x,int y,int radius, unsigned int color);
+#define drawCir drawCircle
 void drawLine(int x1,int y1,int x2,int y2,unsigned int color);
 
 #endif

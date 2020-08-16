@@ -32,6 +32,8 @@ void graphics_init(SDL_Renderer *render)
     {
         printf("TTF_OpenFont: %s\n", TTF_GetError());
     }
+    //设置支持 Alpha
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 }
 void setDrawRenderer(SDL_Renderer *render)
 {
@@ -203,3 +205,5 @@ void graphics_free(){
     //退出SDL_ttf
     TTF_Quit();
 }
+
+

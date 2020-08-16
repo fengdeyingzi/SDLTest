@@ -4,6 +4,10 @@
 #include "exb.h"
 #include "encode.h"
 
+void setTextSize(int type,int size){
+    
+}
+
 
 //ex_coding函数实现 万能编码转换函数
 char* ex_coding(char* text,int len,char* coding,char* tocoding){

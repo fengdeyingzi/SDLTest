@@ -24,8 +24,9 @@ typedef signed short int16;       //有符号16bit整型
 // #define NULL (void *)0
 #define TRUE 1
 #define FALSE 0
-#define SCRW 300//系统内部宏，值为屏幕宽
-#define SCRH 300//系统内部宏，值为屏幕高
+extern int SCRW ;//系统内部宏，值为屏幕宽
+extern int SCRH ;//系统内部宏，值为屏幕高
+#define TCC 1
 
 //基本按键值（未定义的其他按键也可以使用，但需知道其键值）
 enum
@@ -118,6 +119,11 @@ int timercreate();
 int timerstart(int t, int time, int data, mrc_timerCB timerCB, int loop);
 int timerstop(int t);
 int timerdel(int t);
-
+void sleep(int ms);
+void drect(int x,int y,int w,int h,int r,int g,int b);
+void dline(int x1,int x2,int y1,int y2,int r, int g,int b);
+void dpointex(int x,int y,int r,int g,int b);
+void getscrsize(int *w,int *h);
+void setscrsize(int w,int h);
 
 #endif

@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "base.h"
+#include "graphics.h"
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/time.h>
+// #undef BITMAPINFO
 #include <windows.h>
+
 #include <time.h> //时间
 static SDL_Renderer *renderer;
 static SDL_Window *window;
+int SCRH = 300;
+int SCRW = 300;
 
 typedef struct MRC_TIMER {
     int32 time;    //定时器时长
@@ -28,6 +33,11 @@ typedef struct MRC_TIMER {
 void base_init( SDL_Window *win, SDL_Renderer *render){
     renderer = render;
     window = win;
+    SCRW = 480;
+    SCRH = 720;
+    setscrsize(SCRW,SCRH);
+    // SDL_SetWindowDisplayMode(win, SDL_DisplayMode)
+    // SDL_SetWindowPosition(win, 0,0);
 }
 
 //请屏
@@ -148,3 +158,66 @@ int timerdel(int t){
     SDL_RemoveTimer(timer->timerId);
     free(timer);
 }
+
+int textwh(char *pcText, int is_unicode, int font, int* w, int* h){
+    return 20;
+}
+
+int dtext(char *pcText, int x,int y, int r,int g, int b, int is_unicode, int font){
+    drawText(pcText, x, y, font, (0xff000000|(r<<16)|(g<<8)|b));
+    return 0;
+}
+
+int dtextex(char *pcText, int x,int y, rectst *rect, colorst *color, int flag, int font){
+    drawText(pcText, x, y, font, (0xff000000|(color->r<<16)|(color->g<<8)|color->b));
+    return 0;
+}
+
+int dtextright(char *pcText, int x,int y, rectst *rect, colorst *color, int flag, int font){
+    drawText(pcText, x, y, font, (0xff000000|(color->r<<16)|(color->g<<8)|color->b));
+    return 0;
+}
+
+void sleep(int ms){
+
+}
+
+void drect(int x,int y,int w,int h,int r,int g,int b){
+    SDL_SetRenderDrawColor(renderer, r,g,b,255);
+    SDL_Rect rect = {x, y, w, h};
+    SDL_RenderFillRect(renderer, &rect); //
+}
+
+void dline(int x1,int x2,int y1,int y2,int r, int g,int b){
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+}
+
+void dpointex(int x,int y,int r,int g,int b){
+
+}
+
+void getscrsize(int *w,int *h){
+    *w = SCRW;
+    *h = SCRH;
+}
+
+void setscrsize(int w,int h){
+    SCRW = w;
+    SCRH = h;
+    SDL_SetWindowSize(window, SCRW,SCRH);
+    SDL_UpdateWindowSurface(window);
+}
+
+void effsetcon(int x,int y,int w,int h){
+
+}
+
+int  dlgcreate(char *title,char *text,int type){
+    return 0;
+}
+
+int dlgdel(int dialog){
+    return 0;
+}
+

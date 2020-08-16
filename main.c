@@ -60,7 +60,7 @@ void drawpoly(SDL_Renderer *renderer, float x, float y, int n, float r)
     }
     return;
 }
-
+int isDown = 0;
 int main(int argc, char *argv[])
 {
     printf("start\n");
@@ -69,7 +69,9 @@ int main(int argc, char *argv[])
     {
         return -1;    
     }
-    SDL_Window *window = SDL_CreateWindow("SDL测试 - 风的影子", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN);
+    SDL_Window *window = SDL_CreateWindow("SDL测试 - 风的影子", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 720, SDL_WINDOW_SHOWN);
+    SDL_Surface *icon = IMG_Load("assets/ic_launcher.png");
+    SDL_SetWindowIcon(window, icon);
     // SDL_Surface *surface = NULL;
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     
@@ -163,12 +165,15 @@ int main(int argc, char *argv[])
                 quit = true;
                 break;
             case SDL_MOUSEMOTION:
+                if(isDown)
                 event(MS_MOVE, e.motion.x, e.motion.y);
                 break;
             case SDL_MOUSEBUTTONDOWN:
                 event(MS_DOWN, e.motion.x, e.motion.y);
+                isDown = 1;
                 break;
             case SDL_MOUSEBUTTONUP:
+                isDown = 0;
                 event(MS_UP, e.motion.x, e.motion.y);
                 break;
             }
