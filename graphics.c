@@ -168,10 +168,13 @@ int readBitmap(char *filename)
 
 int clipBitmap(int bmp, int x,int y,int w,int h){
      SDL_Surface *surface = (SDL_Surface *)bmp;
-    //  SDL_CreateRGBSurfaceFrom
-    SDL_Rect rect = {x,y,w,h};
-     surface->clip_rect = rect;
-     return bmp;
+     SDL_Surface *newsurface = (SDL_Surface *)createBitmap(w,h);
+     SDL_Rect srcrect = {x,y,w,h};
+     SDL_Rect dstrect = {0,0,w,h};
+
+     SDL_SoftStretch(surface,  &srcrect, newsurface, &dstrect);
+     
+     return (int)newsurface;
 }
 
 int drawBitmapOld(int di, int buf, int x,int y,int w,int h, int sw, int sh){
