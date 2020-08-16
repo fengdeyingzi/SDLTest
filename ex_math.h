@@ -2,28 +2,29 @@
 #ifndef _EX_MATH_H_
 #define _EX_MATH_H_
 #include <math.h>
+#include "base.h"
 
 /*
 “shell（希尔）法”
 shell法是一个叫 shell 的美国人与1969年发明的。它首先把相距k(k>=1)的那几个元素排好序，再缩小k值（一般取其一半），再排序，直到k=1时完成排序。下面让我们来分析其代码：
 */
-void shell(int *a,int n)
-{
-int i,j,k,x;
-k=n/2; /*间距值*/
-while(k>=1) {
-for(i=k;i<n;i++) {
-x=a[i];
-j=i-k;
-while(j>=0&&x<a[j]) {
-a[j+k]=a[j];
-j-=k;
-}
-a[j+k]=x;
-}
-k/=2; /*缩小间距值*/
-}
-}
+// void shell(int *a,int n)
+// {
+// int i,j,k,x;
+// k=n/2; /*间距值*/
+// while(k>=1) {
+// for(i=k;i<n;i++) {
+// x=a[i];
+// j=i-k;
+// while(j>=0&&x<a[j]) {
+// a[j+k]=a[j];
+// j-=k;
+// }
+// a[j+k]=x;
+// }
+// k/=2; /*缩小间距值*/
+// }
+// }
 
 
 

@@ -10,7 +10,11 @@ static SDL_Renderer *renderer;
 static SDL_Window *window;
 static TTF_Font *fonts[3];
 
-int createBitmap(int w, int h);
+int createBitmap(int w, int h){
+    int rmask = 0xFF000000; int gmask = 0x00FF0000; int bmask = 0x0000FF00; int amask = 0x000000FF;	// RGBA8888模式
+    SDL_Surface *surface = SDL_CreateRGBSurface(SDL_SWSURFACE, w, h , 32, rmask, gmask, bmask, amask);
+    return (int)surface;
+}
 
 static int min(int num1,int num2){
     return num1<num2? num1 : num2;
@@ -153,10 +157,38 @@ int readBitmap(char *filename)
     SDL_Texture *pTexture = NULL;
 
     // surface = SDL_LoadBMP(filename);
+    if(strncmp(filename,"assets://",9)==0){
+        return readBitmapFromAssets(filename+9);
+    }
     surface = IMG_Load(filename);
     // //使用SDL_Surface创建Texture
     // pTexture = SDL_CreateTextureFromSurface(renderer, surface);
     return (int)surface;
+}
+
+int clipBitmap(int bmp, int x,int y,int w,int h){
+     SDL_Surface *surface = (SDL_Surface *)bmp;
+    //  SDL_CreateRGBSurfaceFrom
+    SDL_Rect rect = {x,y,w,h};
+     surface->clip_rect = rect;
+     return bmp;
+}
+
+int drawBitmapOld(int di, int buf, int x,int y,int w,int h, int sw, int sh){
+    return 0;
+}
+
+int saveBitmap(int bmp, char *filename, int type, int load){
+    return 0;
+}
+
+int bitmapGetInfo(int bmp, _BITMAPINFO *info){
+    SDL_Surface *surface = (SDL_Surface *)bmp;
+    info->width = surface->w;
+    info->height = surface->h;
+    info->format = surface->format->format;
+    info->ptr = surface->pixels;
+    return 0;
 }
 
 int readBitmapFromAssets(char *filename)

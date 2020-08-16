@@ -225,3 +225,14 @@ int dlgdel(int dialog){
     return 0;
 }
 
+void sand(unsigned int num){
+
+}
+
+void img(char *filename, int x,int y){
+    int bitmap = readBitmap(filename);
+    if(bitmap){
+        drawBitmap(bitmap,x,y);
+        bitmapFree(bitmap);
+    }
+}
