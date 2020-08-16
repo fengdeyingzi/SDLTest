@@ -129,6 +129,7 @@ Uint32 capp_timerRun(Uint32 interval, void *param)
     _TIMER *timer = (_TIMER *)param;
 
     if(!timer->loop){
+        timer->isStop = 1;
 SDL_RemoveTimer(timer->timerId);
     }
     timer->timerCB(timer->data);
@@ -148,8 +149,11 @@ int timerstart(int t, int time, int data, mrc_timerCB timerCB, int loop){
 
 int timerstop(int t){
     _TIMER *timer = (_TIMER *)t;
-    timer->isStop = 1;
-    SDL_RemoveTimer(timer->timerId);
+    if(!timer->isStop){
+        timer->isStop = 1;
+        SDL_RemoveTimer(timer->timerId); 
+    }
+    
 }
 
 int timerdel(int t){
