@@ -237,13 +237,13 @@ void drawBitmapEx(int bmp, int x, int y, int w, int h, int tx, int ty, int tw, i
     SDL_DestroyTexture(pTexture);
 }
 
-void drawBitmapRotate(int bmp, int scrx, int scry, int bx,int by, int r, int color){
+void drawBitmapRotate(int bmp, int scrx, int scry, int bx,int by, int r, int alpha){
     SDL_Surface *surface = (SDL_Surface *)bmp;
     SDL_Texture *pTexture = NULL;
     SDL_Rect srcRect = {0, 0, surface->w, surface->h};
     SDL_Rect dstRect = {scrx, scry, surface->w, surface->h};
     pTexture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_Point point = {scrx,scry};
+    SDL_Point point = {bx,by};
     SDL_RenderCopyEx(renderer, pTexture, &srcRect, &dstRect, r, &point, SDL_FLIP_NONE);
     SDL_DestroyTexture(pTexture);
 }
