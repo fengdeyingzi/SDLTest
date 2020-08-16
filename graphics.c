@@ -172,7 +172,7 @@ int clipBitmap(int bmp, int x,int y,int w,int h){
      SDL_Rect srcrect = {x,y,w,h};
      SDL_Rect dstrect = {0,0,w,h};
 
-     SDL_SoftStretch(surface,  &srcrect, newsurface, &dstrect);
+     SDL_UpperBlit(surface,  &srcrect, newsurface, &dstrect);
      
      return (int)newsurface;
 }

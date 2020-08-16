@@ -29,6 +29,7 @@ typedef struct{
 
 
 int createBitmap(int w, int h);
+int clipBitmap(int bmp, int x,int y,int w,int h);
 void graphics_init(SDL_Window *win, SDL_Renderer *render);
 void graphics_free();
 void setDrawRenderer(SDL_Renderer *render);
