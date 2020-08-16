@@ -103,6 +103,21 @@ typedef struct
 } colorst;
 
 typedef void (*mrc_timerCB)(int data);
+typedef struct MRC_TIMER {
+    int32 time;    //定时器时长
+    int32 uptime;  //剩余时间(无效)
+    uint32 starttime; //定时器创建时间(无效)
+    int32 data;  //data数据
+    mrc_timerCB timerCB;  //回调函数
+    int32 loop;  //是否循环
+    int32 isrun;  //是否在运行(无效，被runnable取代)
+    struct MRC_TIMER *next;  //指向下一个定时器
+    int32 isStop;
+    SDL_TimerID timerId;
+    SDL_TimerCallback callback;
+} _TIMER;
+#define SDL_TIMER 0x8001
+
 
 void base_init( SDL_Window *win, SDL_Renderer *render);
 

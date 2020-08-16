@@ -14,19 +14,7 @@ static SDL_Window *window;
 int SCRH = 300;
 int SCRW = 300;
 
-typedef struct MRC_TIMER {
-    int32 time;    //定时器时长
-    int32 uptime;  //剩余时间(无效)
-    uint32 starttime; //定时器创建时间(无效)
-    int32 data;  //data数据
-    mrc_timerCB timerCB;  //回调函数
-    int32 loop;  //是否循环
-    int32 isrun;  //是否在运行(无效，被runnable取代)
-    struct MRC_TIMER *next;  //指向下一个定时器
-    int32 isStop;
-    SDL_TimerID timerId;
-    SDL_TimerCallback callback;
-} _TIMER;
+
 
 
 //初始化
@@ -114,7 +102,7 @@ unsigned int getuptime(){
 //     // gettimeofday(&tv, NULL);
 //     // timestamp = tv.tv_sec * 1000000 + tv.tv_usec;
 #endif
-
+    // return SDL_GetPerformanceCounter();
 }
 
 int timercreate(){
@@ -132,8 +120,17 @@ Uint32 capp_timerRun(Uint32 interval, void *param)
         timer->isStop = 1;
 SDL_RemoveTimer(timer->timerId);
     }
-    timer->timerCB(timer->data);
-
+    // timer->timerCB(timer->data);
+    SDL_Event event;// = (SDL_Event*)malloc(sizeof(SDL_Event));
+    SDL_UserEvent userevent;
+    userevent.timestamp = SDL_GetTicks();
+    userevent.code = SDL_TIMER;
+    userevent.type = SDL_USEREVENT;
+    userevent.data1 = timer;
+    userevent.data2 = timer->timerCB;
+    event.type = SDL_USEREVENT;
+    event.user = userevent;
+    SDL_PushEvent(&event);
     return interval;
 }
 

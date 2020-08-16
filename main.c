@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
     base_init(window, renderer);
     graphics_init(window, renderer);
     init(); //调用CAPP的init函数
+    _TIMER *timer = NULL;
     // while (!quit)
     // {
     //     Uint32 c_red = 0xffffffff;
@@ -160,6 +161,13 @@ int main(int argc, char *argv[])
         {
             switch (e.type)
             {
+            case SDL_USEREVENT:
+                if (e.user.code == SDL_TIMER){
+                    timer = (_TIMER *)(e.user.data1);
+                    timer->timerCB(timer->data);
+                }
+
+                break;
             case SDL_QUIT:
                 exitApp();
                 quit = true;
