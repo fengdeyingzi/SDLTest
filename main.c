@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     // surface = SDL_GetWindowSurface(window);
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     base_init(window, renderer);
-    graphics_init(renderer);
+    graphics_init(window, renderer);
     init(); //调用CAPP的init函数
     // while (!quit)
     // {

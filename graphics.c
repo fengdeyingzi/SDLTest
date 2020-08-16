@@ -3,15 +3,23 @@ SDL 实现手机C的graphics.h
 */
 
 #include "graphics.h"
+#include "base.h"
+
 
 static SDL_Renderer *renderer;
+static SDL_Window *window;
 static TTF_Font *fonts[3];
 
 int createBitmap(int w, int h);
 
-void graphics_init(SDL_Renderer *render)
+static int min(int num1,int num2){
+    return num1<num2? num1 : num2;
+}
+
+void graphics_init(SDL_Window *win,SDL_Renderer *render)
 {
     renderer = render;
+    window = win;
     //初始化SDL_ttf
     if (TTF_Init() == -1)
     {
@@ -40,7 +48,7 @@ void setDrawRenderer(SDL_Renderer *render)
     renderer = render;
 }
 
-void drawText(char *text, int x, int y, int font_type, unsigned int color)
+void drawText(char *text, int x, int y,unsigned int color, int is_unicode, int font_type)
 {
     //打开字库
     // TTF_Font *font;
@@ -51,6 +59,10 @@ void drawText(char *text, int x, int y, int font_type, unsigned int color)
     SDL_Color scolor = {(color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff}; //颜色
     SDL_Surface *text_surface;
     SDL_Texture *pTexture = NULL;
+    if(is_unicode){
+        text_surface = TTF_RenderUNICODE_Solid(fonts[font_type], (Uint16*)text, scolor);
+    }
+    else
     text_surface = TTF_RenderUTF8_Solid(fonts[font_type], text, scolor);
     if (text_surface != NULL)
     {
@@ -75,6 +87,64 @@ void drawText(char *text, int x, int y, int font_type, unsigned int color)
         printf("drawText error\n");
         return;
     }
+}
+
+void drawTextEx(char *text, int x,int y, rectst *rect, unsigned int color, int is_unicode, int font_type)
+{
+    //打开字库
+    // TTF_Font *font;
+    // font=TTF_OpenFont("font.ttf", 64);
+    // if(!font) {
+    //     printf("TTF_OpenFont: %s\n", TTF_GetError());
+    // }
+    SDL_Color scolor = {(color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff}; //颜色
+    SDL_Surface *text_surface;
+    SDL_Texture *pTexture = NULL;
+    if(is_unicode){
+        text_surface = TTF_RenderUNICODE_Blended_Wrapped(fonts[font_type], (Uint16*)text, scolor, rect->w);
+    }
+    else
+    text_surface = TTF_RenderUTF8_Blended_Wrapped(fonts[font_type], text, scolor, rect->w);
+    SDL_Rect cliprect = {rect->x, rect->y, rect->w, rect->h};
+    int window_w,window_h;
+    SDL_GetWindowSize(window, &window_w, &window_h);
+    SDL_Rect allrect = {0, 0, window_w, window_h};
+    if (text_surface != NULL)
+    {
+        pTexture = SDL_CreateTextureFromSurface(renderer, text_surface);
+        // SDL_FreeSurface(text_surface);
+        int dw = min(rect->w, text_surface->w);
+        int dh = min(rect->h, text_surface->h);
+        SDL_Rect srcrect = {0, 0, text_surface->w, text_surface->h};
+        SDL_Rect dstrect = {x, y, text_surface->w, text_surface->h};
+        SDL_RenderSetClipRect(renderer, &cliprect);
+        //往渲染器上copy字体
+        //<-----------------第二步：渲染文字即可----------------------------->
+        SDL_RenderCopy(renderer, pTexture, &srcrect, &dstrect);
+        SDL_DestroyTexture(pTexture);
+        
+        printf("drawText 1\n");
+        // drawBitmap(x,y, (int)text_surface);
+        // SDL_BlitSurface(text_surface, NULL, renderer, NULL);//将文字复制到屏幕的surface上面
+        SDL_FreeSurface(text_surface);
+        SDL_RenderSetClipRect(renderer, &allrect);
+        printf("drawText ok\n");
+        return;
+    }
+    else
+    {
+        // report error
+        printf("drawText error\n");
+        return;
+    }
+}
+
+void getTextWH(char *text,int is_unicode, int font_type, int *w, int *h){
+    if(is_unicode){
+        TTF_SizeUNICODE(fonts[font_type], (Uint16*)text, w, h);
+    }
+    else
+    TTF_SizeUTF8(fonts[font_type], text, w,h);
 }
 
 int readBitmap(char *filename)
@@ -140,6 +210,12 @@ void bitmapFree(int bmp)
 {
     SDL_Surface *surface = (SDL_Surface *)bmp;
     SDL_FreeSurface(surface);
+}
+
+//
+void drawPoint(int x,int y,unsigned int color){
+    SDL_SetRenderDrawColor(renderer, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
+    SDL_RenderDrawPoint(renderer,x,y);
 }
 
 //画矩形

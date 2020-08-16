@@ -9,6 +9,7 @@ SDL 实现手机C的graphics.h
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "base.h"
 
 
 enum{
@@ -28,10 +29,13 @@ typedef struct{
 
 
 int createBitmap(int w, int h);
-void graphics_init(SDL_Renderer *render);
+void graphics_init(SDL_Window *win, SDL_Renderer *render);
 void graphics_free();
 void setDrawRenderer(SDL_Renderer *render);
-void drawText(char *text, int x, int y, int font_type, unsigned int color);
+void drawText(char *text, int x, int y,unsigned int color, int is_unicode, int font_type);
+void drawTextEx(char *text, int x,int y, rectst *rect, unsigned int color, int is_unicode, int font_type);
+
+void getTextWH(char *text,int is_unicode, int font_type, int *w, int *h);
 int readBitmap(char *filename);
 int readBitmapFromAssets(char *filename);
 void drawBitmap(int bmp, int x,int y);
@@ -40,6 +44,7 @@ void drawBitmapFlip(int bmp, int x,int y, int w,int h, int tx,int ty);
 void drawBitmapEx(int bmp, int x,int y,int w,int h, int tx,int ty,int tw,int th);
 void bitmapFree(int bmp);
 
+void drawPoint(int x,int y,unsigned int color);
 //画矩形
 void drawRect(int x, int y, int w, int h, unsigned int color);
 

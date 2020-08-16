@@ -160,26 +160,29 @@ int timerdel(int t){
 }
 
 int textwh(char *pcText, int is_unicode, int font, int* w, int* h){
-    return 20;
+    getTextWH(pcText, is_unicode, font, w,h);
+    return 0;
 }
 
 int dtext(char *pcText, int x,int y, int r,int g, int b, int is_unicode, int font){
-    drawText(pcText, x, y, font, (0xff000000|(r<<16)|(g<<8)|b));
+    drawText(pcText, x, y,(0xff000000|(r<<16)|(g<<8)|b),is_unicode, font);
     return 0;
 }
 
-int dtextex(char *pcText, int x,int y, rectst *rect, colorst *color, int flag, int font){
-    drawText(pcText, x, y, font, (0xff000000|(color->r<<16)|(color->g<<8)|color->b));
+int dtextex(char *pcText, int x,int y, rectst *rect, colorst *color, int is_unicode, int font){
+    drawTextEx(pcText, x, y,rect, (0xff000000|(color->r<<16)|(color->g<<8)|color->b), is_unicode, font);
     return 0;
 }
 
-int dtextright(char *pcText, int x,int y, rectst *rect, colorst *color, int flag, int font){
-    drawText(pcText, x, y, font, (0xff000000|(color->r<<16)|(color->g<<8)|color->b));
+int dtextright(char *pcText, int x,int y, rectst *rect, colorst *color, int is_unicode, int font){
+    int w=0,h=0;
+    getTextWH(pcText, is_unicode, font, &w,&h);
+    drawText(pcText, x-w, y, (0xff000000|(color->r<<16)|(color->g<<8)|color->b), is_unicode, font);
     return 0;
 }
 
 void sleep(int ms){
-
+    Sleep(ms);
 }
 
 void drect(int x,int y,int w,int h,int r,int g,int b){
@@ -194,7 +197,8 @@ void dline(int x1,int x2,int y1,int y2,int r, int g,int b){
 }
 
 void dpointex(int x,int y,int r,int g,int b){
-
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_RenderDrawPoint(renderer,x,y);
 }
 
 void getscrsize(int *w,int *h){

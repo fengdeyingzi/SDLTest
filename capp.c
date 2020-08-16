@@ -3,7 +3,7 @@
 #include "graphics.h"
 #include "fnt.h"
 
-bool isDown = false;
+static bool isDown = false;
 int point_x=0, point_y=0;
 _FNT *fnt = NULL;
 int timer = 0;
@@ -12,14 +12,15 @@ int number = 0;
 void logoc(int data){
     cls(20,20,20);
     char text[300];
-    sprintf(text,"定时器 运行第%d次\n", ++number);
-    drawText(text, 100,300, 0, 0xff30ff30);
+    sprintf(text,"定时器 运行第%d次\ntest", ++number);
+    drawText(text, 100,300,  0xff30ff30,0,1);
     // fnt_drawline(fnt,text,10,10);
     ref(0,0,300,300);
 }
 
 int init()
 {
+    setscrsize(480,720);
     cls(60, 60, 60);
     // drawCircle(0, 0, 30, 0xff30f0f0);
     int bmp = readBitmapFromAssets("ic_launcher.png");
@@ -40,7 +41,12 @@ int time = getuptime();
     // 
     // fnt_free(fnt);
     timer = timercreate();
-    timerstart(timer, 1000, 1, logoc, 1);
+    rectst rect = {0,30,300,300};
+    drawRect(rect.x, rect.y, rect.w,rect.h, 0xff2060a0);
+    drawTextEx("测试 test test test test test \n测试\n", 0, 290, &rect, 0xfff0f0f0, 0, 1);
+    rectst rect2 = {30,80,300,300};
+    drawTextEx("测试 test test test test test \n测试\n", 30, 300, &rect2, 0xfff0f0f0, 0, 1);
+    // timerstart(timer, 1000, 1, logoc, 1);
     ref(0,0,SCRW,SCRH);
 
 }
