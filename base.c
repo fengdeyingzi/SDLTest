@@ -185,6 +185,10 @@ void sleep(int ms){
     Sleep(ms);
 }
 
+int shake(int ms){
+    return 0;
+}
+
 void drect(int x,int y,int w,int h,int r,int g,int b){
     SDL_SetRenderDrawColor(renderer, r,g,b,255);
     SDL_Rect rect = {x, y, w, h};
