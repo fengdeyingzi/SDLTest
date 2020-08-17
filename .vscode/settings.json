@@ -6,6 +6,9 @@
         "sdl.h": "c",
         "stat.h": "c",
         "base.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "stdio.h": "c",
+        "encode.h": "c",
+        "exb.h": "c"
     },
 }

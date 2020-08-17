@@ -63,7 +63,7 @@ char* ex_coding(char* text,int len,char* coding,char* tocoding){
 //gb编码转unicode 返回的字符串需要释放内存
 char *gbToUn(char *text)
 {
- int len=0;
+ int32 len=0;
  return (char*)mrc_c2u(text, NULL, &len);
  
 }

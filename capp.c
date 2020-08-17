@@ -50,7 +50,11 @@ int time = getuptime();
     drawTextEx("测试 test test test test test \n测试\n", 30, 300, &rect2, 0xfff0f0f0, 0, 1);
     timerstart(timer, 1000, 1, logoc, 1);
     // drawBitmap(bmp,0,0);
-    drawBitmap(new_bmp, 0, 0);
+    for(int i=0;i<5;i++)
+    drawBitmap(new_bmp, i*50, 0);
+    bitmapFree(new_bmp);
+    bitmapFree(bmp);
+
     ref(0,0,SCRW,SCRH);
 
 }

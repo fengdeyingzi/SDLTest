@@ -2,6 +2,8 @@
 #ifndef __BASE_H__
 #define __BASE_H__
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 
 //系统版本，由于软件的更新，可能会造成有些函数、宏、类型等不一致而导致运行出错
@@ -135,6 +137,7 @@ int timerstart(int t, int time, int data, mrc_timerCB timerCB, int loop);
 int timerstop(int t);
 int timerdel(int t);
 void sleep(int ms);
+unsigned int getuptime();
 void drect(int x,int y,int w,int h,int r,int g,int b);
 void dline(int x1,int x2,int y1,int y2,int r, int g,int b);
 void dpointex(int x,int y,int r,int g,int b);

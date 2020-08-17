@@ -18,6 +18,7 @@ char *UCS2ByteRev(char * str);
 //unicode小端转utf
 int UCS2ToUTF8(const uint8 *unicode, uint8 *utf8, int size);
 int UCS2_strlen(const char * txt);
+uint16 *mrc_c2u(char *cp, int32 *err, int32 *size);
 
 
 
