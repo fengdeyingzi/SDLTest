@@ -55,7 +55,8 @@ SDL_Surface *surface_ui = NULL;
 SDL_Surface *surface_cache = NULL;
 int main(int argc, char *argv[])
 {
-win_main();
+// MessageBox(NULL,(LPCSTR)"hello world",(LPCSTR)"测试", MB_OK);
+
     printf("start\n");
     //初始化所有SDL子系统
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)

@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <windows.h>
 
 extern SDL_Surface *surface_ui;
 uint32_t toast_end_time;
@@ -188,5 +189,6 @@ void toast(char *text, int type){
         printf("drawText error\n");
         return;
     }
+    // MessageBox(NULL,(LPCSTR)"hello world",(LPCSTR)"Title", MB_OK);
     ref(0,0,SCRW,SCRH);
 }
