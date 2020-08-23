@@ -1,47 +1,147 @@
 #include <stdio.h>
+#include <string.h>
 #include <SDL2/SDL.h>
 #include "base.h"
 #include "graphics.h"
 #include <fcntl.h>
+#include "utils.h"
 #include <sys/stat.h>
 // #include <sys/time.h>
 // #undef BITMAPINFO
 #include <windows.h>
 
 #include <time.h> //时间
-static SDL_Renderer *renderer;
-static SDL_Window *window;
-int SCRH = 300;
-int SCRW = 300;
+extern SDL_Surface *surface_window;
+extern SDL_Surface *surface_cache;
+extern SDL_Window *window;
+int SCRH = 480;
+int SCRW = 720;
 
 
+/*
+ * Return the pixel value at (x, y) 获取像素
+ * NOTE: The surface must be locked before calling this!
+ */
+static Uint32 get_pixel(SDL_Surface *surface, int x, int y)
+{
+    int bpp = surface->format->BytesPerPixel;
+    /* Here p is the address to the pixel we want to retrieve */
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+    switch (bpp)
+    {
+    case 1:
+        return *p;
+
+    case 2:
+        return *(Uint16 *)p;
+
+    case 3:
+        if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            return p[0] << 16 | p[1] << 8 | p[2];
+        else
+            return p[0] | p[1] << 8 | p[2] << 16;
+
+    case 4:
+        return *(Uint32 *)p;
+
+    default:
+        return 0; /* shouldn't happen, but avoids warnings */
+    }
+}
+
+/*
+ * Set the pixel at (x, y) to the given value 设置像素
+ * NOTE: The surface must be locked before calling this!
+ */
+static void put_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    switch (surface->format->BytesPerPixel)
+    {
+    case 1: // Assuming 8-bpp
+    {
+        Uint8 *bufp;
+        bufp = (Uint8 *)surface->pixels + y * surface->pitch + x;
+        *bufp = pixel;
+    }
+    break;
+    case 2: // Probably 15-bpp or 16-bpp
+    {
+        Uint16 *bufp;
+        bufp = (Uint16 *)surface->pixels + y * surface->pitch / 2 + x;
+        *bufp = pixel;
+    }
+    break;
+    case 3: // Slow 24-bpp mode, usually not used
+    {
+        Uint8 *bufp;
+        bufp = (Uint8 *)surface->pixels + y * surface->pitch + x * 3;
+        if (SDL_BYTEORDER == SDL_LIL_ENDIAN)
+        {
+            bufp[0] = pixel;
+            bufp[1] = pixel >> 8;
+            bufp[2] = pixel >> 16;
+        }
+        else
+        {
+            bufp[2] = pixel;
+            bufp[1] = pixel >> 8;
+            bufp[0] = pixel >> 16;
+        }
+    }
+    break;
+    case 4: // Probably 32-bpp
+    {
+        Uint32 *bufp;
+        bufp = (Uint32 *)surface->pixels + y * surface->pitch / 4 + x;
+        *bufp = pixel;
+    }
+    break;
+    }
+}
 
 
 //初始化
-void base_init( SDL_Window *win, SDL_Renderer *render){
-    renderer = render;
-    window = win;
-    SCRW = 480;
-    SCRH = 720;
-    setscrsize(SCRW,SCRH);
-    // SDL_SetWindowDisplayMode(win, SDL_DisplayMode)
-    // SDL_SetWindowPosition(win, 0,0);
+void base_init(){
+    
 }
+
+
 
 //请屏
 void cls(int r,int g,int b){
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderClear(renderer);
+    uint32 color = ((r<<24)|(g<<16)|(b<<8)|255);
+    for(int ix=0;ix<surface_cache->w;ix++){
+        for(int iy=0;iy<surface_cache->h;iy++){
+            put_pixel(surface_cache, ix,iy,color);
+        }
+    }
+    // SDL_RenderClear(renderer);
+}
+
+void LOG_I(char *text){
+    int f = open("C/print.txt", O_RDONLY|O_WRONLY|O_CREAT, 0777);
+    if(f>=0){
+        lseek(f, 0, SEEK_END);
+    write(f,text,strlen(text));
+    close(f);
+    }
+    
 }
 
 //刷新屏幕
 void ref(int x,int y,int w,int h){
-    SDL_RenderPresent(renderer);
+    SDL_Rect srcRect = {x, y, w, h};
+    SDL_Rect dstRect = {x, y, w, h};
+    //Blit操作
+    SDL_BlitSurface(surface_cache, &srcRect, surface_window, &dstRect);
+    SDL_UpdateWindowSurface(window);
 }
 
 void capp_exit(){
+    SDL_FreeSurface(surface_window);
+    SDL_FreeSurface(surface_cache);
     SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
 }
 
 int getlen(const char* filename)
@@ -191,20 +291,79 @@ int shake(int ms){
     return 0;
 }
 
+
+
 void drect(int x,int y,int w,int h,int r,int g,int b){
-    SDL_SetRenderDrawColor(renderer, r,g,b,255);
-    SDL_Rect rect = {x, y, w, h};
-    SDL_RenderFillRect(renderer, &rect); //
+    uint32 color = ((r<<24)|(g<<16)|(b<<8)|255);
+    for(int ix=x;ix<x+w;ix++){
+        for(int iy=y;iy<y+h;iy++){
+            if(ix>=0&& iy>=0 && ix<SCRW && iy<SCRH)
+            put_pixel(surface_cache, ix,iy,color);
+        }
+    }
 }
 
-void dline(int x1,int x2,int y1,int y2,int r, int g,int b){
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+void dline(int x1,int y1,int x2,int y2,int r, int g,int b){
+     	int x, y, dx, dy, c1, c2, err, swap = 0;
+uint32 color = ((r<<24)|(g<<16)|(b<<8)|255);
+#ifdef MR_ANYKA_MOD
+	uint32 nativecolor;
+#else
+	uint16 nativecolor;
+#endif
+	/*
+	nativecolor = (r/8)<<11;
+	nativecolor |=(g/4)<<5;
+	nativecolor |=(b/8);     
+	*/
+	nativecolor = MAKERGB(r, g, b);
+
+	/*   
+	if (x1 < 0 || x1 >= MR_SCREEN_W || x2 < 0 || x2 >= MR_SCREEN_W ||
+	y1 < 0 || y1 >= MR_SCREEN_H || y2 < 0 || y2 >= MR_SCREEN_H)
+	return;
+	*/
+
+	dx = x2 - x1; dy = y2 - y1;
+	if (((dx < 0) ? -dx : dx) < ((dy < 0) ? -dy : dy))
+	{
+		swap = 1;                       /* take the long way        */
+		x = x1; x1 = y1; y1 = x;
+		x = x2; x2 = y2; y2 = x;
+	}
+	if (x1 > x2)
+	{
+		x = x1; x1 = x2; x2 = x;        /* always move to the right */
+		y = y1; y1 = y2; y2 = y;
+	}
+
+	dx = x2 - x1; dy = y2 - y1;
+	c1 = dy * 2; dy = 1;
+	if (c1 < 0)
+	{
+		c1 = -c1;
+		dy = -1;
+	}
+	err = c1 - dx; c2 = err - dx;
+	x = x1; y = y1;
+	while (x <= x2)
+	{
+		dpointex((int16)(swap?y:x),(int16)(swap?x:y),r,g,b);
+		x++;
+		if (err < 0)
+			err += c1;
+		else
+		{
+			y += dy;
+			err += c2;
+		}
+	}
 }
 
 void dpointex(int x,int y,int r,int g,int b){
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-    SDL_RenderDrawPoint(renderer,x,y);
+    uint32 color = ((r<<24)|(g<<16)|(b<<8)|255);
+    if(x>=0&& y>=0 && x<SCRW&&y<SCRH)
+    put_pixel(surface_cache, x,y,color);
 }
 
 void getscrsize(int *w,int *h){
@@ -216,6 +375,13 @@ void setscrsize(int w,int h){
     SCRW = w;
     SCRH = h;
     SDL_SetWindowSize(window, SCRW,SCRH);
+    int rmask = 0xFF000000; int gmask = 0x00FF0000; int bmask = 0x0000FF00; int amask = 0x000000FF;	// RGBA8888模式
+    surface_cache = SDL_CreateRGBSurface(SDL_PREALLOC, w, h , 32, rmask, gmask, bmask, amask);
+    SDL_SetSurfaceBlendMode(surface_cache,SDL_BLENDMODE_BLEND);
+
+
+    surface_window = SDL_GetWindowSurface(window);
+    // surface_cache = SDL_CreateRGBSurface(SDL_PREALLOC, surface_window->w, surface_window->h , 32, rmask, gmask, bmask, amask);
     SDL_UpdateWindowSurface(window);
 }
 

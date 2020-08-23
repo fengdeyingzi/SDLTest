@@ -14,10 +14,10 @@ void logoc(int data){
     char text[300];
     sprintf(text,"定时器 运行第%d次\ntest", ++number);
     drawText(text, 100,300,  0xff30ff30,0,1);
-    // fnt_drawline(fnt,text,10,10);
+    fnt_drawline(fnt,text,10,10);
     ref(0,0,300,300);
 }
-
+extern SDL_Window *window;
 int init()
 {
     setscrsize(480,720);
@@ -34,12 +34,26 @@ int time = getuptime();
     printf(" fnt = %d\n",(int)fnt);
     // fnt_draw(fnt,33,30,30);
     // fnt_draw(fnt,(int)'a',50,30);
-    
+    drect(0,0,300,30,255,0,0);
+    dline(0,0,30,30,255,255,255);
+    dpointex(30,30,255,255,255);
+    drawCircle(0,0,30,0xffffffff);
+    drawRect(0,0,5000,5000, 0xff00ffff);
+    drawLine(0,0,5000,5000,0xffff0000);
+    dline(50,50,0,5000, 255,0,0);
+    dtext("test",0,0, 255,255,255,0,1);
+    ref(0,0,SCRW,SCRH);
+    sleep(1000);
+    // drawCircle(0,0,30,0xffff0000);
     fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
     // drawText("测试", 30,30, 1, 0xff30ff30);
     // drawBitmap(fnt->bitmap,0,0);
     printf("耗时：%dms\n",getuptime()-time);
     ref(0,0,SCRW,SCRH);
+    // SDL_UpdateWindowSurface(window);
+    // SDL_RenderPresent(base_getRenderer());
+    
+    sleep(1000);
     // 
     // fnt_free(fnt);
     timer = timercreate();

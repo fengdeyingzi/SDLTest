@@ -121,8 +121,8 @@ typedef struct MRC_TIMER {
 #define SDL_TIMER 0x8001
 
 
-void base_init( SDL_Window *win, SDL_Renderer *render);
-
+void base_init();
+SDL_Renderer *base_getRenderer();
 //请屏
 void cls(int r,int g,int b);
 
@@ -143,5 +143,7 @@ void dline(int x1,int x2,int y1,int y2,int r, int g,int b);
 void dpointex(int x,int y,int r,int g,int b);
 void getscrsize(int *w,int *h);
 void setscrsize(int w,int h);
+void LOG_I(char *text);
+#define sand srand
 
 #endif

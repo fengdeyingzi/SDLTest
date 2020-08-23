@@ -30,7 +30,7 @@ typedef struct{
 
 int createBitmap(int w, int h);
 int clipBitmap(int bmp, int x,int y,int w,int h);
-void graphics_init(SDL_Window *win, SDL_Renderer *render);
+void graphics_init();
 void graphics_free();
 void setDrawRenderer(SDL_Renderer *render);
 void drawText(char *text, int x, int y,unsigned int color, int is_unicode, int font_type);
@@ -43,6 +43,7 @@ void drawBitmap(int bmp, int x,int y);
 
 void drawBitmapFlip(int bmp, int x,int y, int w,int h, int tx,int ty);
 void drawBitmapEx(int bmp, int x,int y,int w,int h, int tx,int ty,int tw,int th);
+int drawBitmapOld(int di, int buf, int x,int y,int w,int h, int sx, int sy);
 void bitmapFree(int bmp);
 
 void drawPoint(int x,int y,unsigned int color);
