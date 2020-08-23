@@ -32,6 +32,7 @@ int createBitmap(int w, int h);
 int clipBitmap(int bmp, int x,int y,int w,int h);
 void graphics_init();
 void graphics_free();
+int32 gl_getColor(int32 color1, uint32 color2);
 void setDrawRenderer(SDL_Renderer *render);
 void drawText(char *text, int x, int y,unsigned int color, int is_unicode, int font_type);
 void drawTextEx(char *text, int x,int y, rectst *rect, unsigned int color, int is_unicode, int font_type);
@@ -44,6 +45,7 @@ void drawBitmap(int bmp, int x,int y);
 void drawBitmapFlip(int bmp, int x,int y, int w,int h, int tx,int ty);
 void drawBitmapEx(int bmp, int x,int y,int w,int h, int tx,int ty,int tw,int th);
 int drawBitmapOld(int di, int buf, int x,int y,int w,int h, int sx, int sy);
+void drawBitmapRotate(int bmp, int scrx, int scry, int bx,int by, int r, int alpha);
 void bitmapFree(int bmp);
 
 void drawPoint(int x,int y,unsigned int color);

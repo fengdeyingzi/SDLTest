@@ -2,6 +2,7 @@
 #include "base.h"
 #include "graphics.h"
 #include "fnt.h"
+#include "android.h"
 
 static bool isDown = false;
 int point_x=0, point_y=0;
@@ -10,7 +11,7 @@ int timer = 0;
 int number = 0;
 
 void logoc(int data){
-    cls(20,20,20);
+    cls(255,200,200);
     char text[300];
     sprintf(text,"定时器 运行第%d次\ntest", ++number);
     drawText(text, 100,300,  0xff30ff30,0,1);
@@ -40,7 +41,7 @@ int time = getuptime();
     dtext("test",0,0, 255,255,255,0,1);
     effsetcon(0,0,300,800, 255,0,0);
     ref(0,0,SCRW,SCRH);
-    sleep(5000);
+    
     // drawCircle(0,0,30,0xffff0000);
     fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
     // drawText("测试", 30,30, 1, 0xff30ff30);
@@ -50,7 +51,7 @@ int time = getuptime();
     // SDL_UpdateWindowSurface(window);
     // SDL_RenderPresent(base_getRenderer());
     
-    sleep(1000);
+    
     // 
     // fnt_free(fnt);
     timer = timercreate();
@@ -65,7 +66,7 @@ int time = getuptime();
     drawBitmap(new_bmp, i*50, 0);
     bitmapFree(new_bmp);
     bitmapFree(bmp);
-
+    toast("测试",1);
     ref(0,0,SCRW,SCRH);
 
 }
@@ -107,6 +108,6 @@ int resume(void)
 
 int exitApp(void){
     fnt_free(fnt);
-    // timerstop(timer);
+    timerstop(timer);
     timerdel(timer);
 }

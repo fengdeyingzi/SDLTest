@@ -128,6 +128,7 @@ void cls(int r,int g,int b);
 
 //刷新屏幕
 void ref(int x,int y,int w,int h);
+#define refall() ref(0,0,SCRW,SCRH)
 
 void capp_exit();
 int getlen(const char* filename);
@@ -146,5 +147,6 @@ void getscrsize(int *w,int *h);
 void setscrsize(int w,int h);
 void LOG_I(char *text);
 #define sand srand
+#define exit capp_exit
 
 #endif

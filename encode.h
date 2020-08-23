@@ -19,7 +19,9 @@ char *UCS2ByteRev(char * str);
 int UCS2ToUTF8(const uint8 *unicode, uint8 *utf8, int size);
 int UCS2_strlen(const char * txt);
 uint16 *mrc_c2u(char *cp, int32 *err, int32 *size);
-
+int32 mrc_unicodeToGb2312(uint8* input, int32 input_len, uint8** output, int32* output_len);
+#define c2u mrc_c2u
+#define u2c mrc_unicodeToGb2312
 
 
 

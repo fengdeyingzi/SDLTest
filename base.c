@@ -8,11 +8,12 @@
 #include <sys/stat.h>
 // #include <sys/time.h>
 // #undef BITMAPINFO
-#include <windows.h>
+// #include <windows.h>
 
 #include <time.h> //时间
 extern SDL_Surface *surface_window;
 extern SDL_Surface *surface_cache;
+extern SDL_Surface *surface_ui;
 extern SDL_Window *window;
 int SCRH = 480;
 int SCRW = 720;
@@ -133,10 +134,13 @@ void LOG_I(char *text){
 void ref(int x,int y,int w,int h){
     SDL_Rect srcRect = {x, y, w, h};
     SDL_Rect dstRect = {x, y, w, h};
+    SDL_Rect uiRect = {0,0,SCRW,SCRH};
     //Blit操作
     SDL_BlitSurface(surface_cache, &srcRect, surface_window, &dstRect);
+    SDL_BlitSurface(surface_ui, &uiRect, surface_window, &uiRect);
     SDL_UpdateWindowSurface(window);
 }
+
 
 void capp_exit(){
     SDL_FreeSurface(surface_window);
@@ -377,7 +381,9 @@ void setscrsize(int w,int h){
     SDL_SetWindowSize(window, SCRW,SCRH);
     int rmask = 0xFF000000; int gmask = 0x00FF0000; int bmask = 0x0000FF00; int amask = 0x000000FF;	// RGBA8888模式
     SDL_FreeSurface(surface_cache);
+    SDL_FreeSurface(surface_ui);
     surface_cache = SDL_CreateRGBSurface(SDL_PREALLOC, w, h , 32, rmask, gmask, bmask, amask);
+    surface_ui = SDL_CreateRGBSurface(SDL_PREALLOC, w, h , 32, rmask, gmask, bmask, amask);
     SDL_SetSurfaceBlendMode(surface_cache,SDL_BLENDMODE_BLEND);
 
 

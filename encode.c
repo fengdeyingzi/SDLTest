@@ -420,6 +420,48 @@ end:
     return uniBuf;
 }
 
+int32 mrc_unicodeToGb2312(uint8* input, int32 input_len, uint8** output, int32* output_len)
+{
+ 	if(!input || input_len == 0){
+				// LOGE("mr_platEx(1207) input err");
+				return MR_FAILED;
+			}
+
+			if(!*output){
+				// LOGE("mr_platEx(1207) ouput err");
+				return MR_FAILED;
+			}
+
+			//input is bigend
+			
+				int len = UCS2_strlen((const char *) input);
+				char *buf = malloc(len + 2);
+
+				int gbBufLen = len + 1;
+				char *gbBuf = malloc(gbBufLen);
+
+				memcpy(buf, input, len+2);
+				UCS2ByteRev(buf);
+				UCS2ToGBString((uint16*)buf, (uint8 *) gbBuf, gbBufLen);
+
+				strcpy((char *) *output, gbBuf);
+				/**
+				 * output_len 返回的GB字符串缓冲的长度。
+				 *
+				 * output   	转换成功以后的bg2312编码字符串存放缓冲区指针，缓冲区的内存由应用调用者提供并管理、释放。
+				 * output_len   output缓冲区的长度，单位字节数
+				 *
+				 * 2013-3-25 16:29:21 2013-3-25 16:51:44
+				 */
+				if(output_len)
+					*output_len = strlen(gbBuf);
+				
+				free(buf);
+			
+ 
+// return mrc_u2c(input,input_len, output, output_len);
+ return 0;
+}
 
 
 

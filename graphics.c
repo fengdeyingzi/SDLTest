@@ -388,8 +388,8 @@ void drawRect(int x, int y, int w, int h, unsigned int color)
     // SDL_SetRenderDrawColor(renderer, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
     // SDL_Rect rect = {x, y, w, h};
     // SDL_RenderFillRect(renderer, &rect); //
-    for(int ix=0;ix<w;ix++){
-        for(int iy=0;iy<h;iy++){
+    for(int ix=x;ix<x+w;ix++){
+        for(int iy=y;iy<y+h;iy++){
             if(ix>=0&&iy>=0&& ix<SCRW&& iy<SCRH)
             drawPoint(ix,iy,color);
         }
