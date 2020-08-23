@@ -376,6 +376,7 @@ void setscrsize(int w,int h){
     SCRH = h;
     SDL_SetWindowSize(window, SCRW,SCRH);
     int rmask = 0xFF000000; int gmask = 0x00FF0000; int bmask = 0x0000FF00; int amask = 0x000000FF;	// RGBA8888模式
+    SDL_FreeSurface(surface_cache);
     surface_cache = SDL_CreateRGBSurface(SDL_PREALLOC, w, h , 32, rmask, gmask, bmask, amask);
     SDL_SetSurfaceBlendMode(surface_cache,SDL_BLENDMODE_BLEND);
 
@@ -385,8 +386,39 @@ void setscrsize(int w,int h){
     SDL_UpdateWindowSurface(window);
 }
 
-void effsetcon(int x,int y,int w,int h){
+int32 effsetcon(int16 x, int16 y, int16 w, int16 h, int16 perr, int16 perg, int16 perb)
+{
+	int16 x_d, y_d;
+	int16 x_min, y_min;
+	int16 x_max, y_max;
+	uint32 pixel_new;
+	uint32 pixel;
+	uint32 p;
 
+
+
+	y_max = MIN(h + y, SCRH);
+	x_max = MIN(w + x, SCRW);
+	y_min = MAX(y, 0);
+	x_min = MAX(x, 0);
+
+	for (y_d = y_min; y_d < y_max; y_d++)
+	{
+		
+		for (x_d = x_min; x_d < x_max; x_d++)
+		{
+            p = get_pixel(surface_cache, x_d,y_d);
+			pixel = p;
+			pixel_new  = (perr * ((pixel & 0xff000000) >> 8)) & 0xff000000;
+			pixel_new |= (perg * ((pixel & 0xff0000) >> 8)) & 0xff0000;
+			pixel_new |= (perb * ((pixel & 0xff00) >> 8)) & 0xff00;
+            pixel_new |= 0xff;
+			p = pixel_new;
+			put_pixel(surface_cache, x_d, y_d, pixel_new);
+		}
+	}
+
+    return 0;
 }
 
 int  dlgcreate(char *title,char *text,int type){

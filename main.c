@@ -217,6 +217,8 @@ event(KY_UP, _9, 0);
         // SDL_Delay(1000 / 60);
     }
     graphics_free();
+    SDL_FreeSurface(surface_cache);
+    SDL_FreeSurface(surface_window);
     SDL_DestroyWindow(window);
     // SDL_DestroyRenderer(renderer);
 

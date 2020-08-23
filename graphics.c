@@ -21,6 +21,29 @@ static int min(int num1,int num2){
     return num1<num2? num1 : num2;
 }
 
+//混合两个颜色
+int32 gl_getColor(int32 color1, uint32 color2){
+ //printf("getColor %x %x\n",color1,color2);
+  //int a1 = (color1>>24)&0xff;
+  int r1 = (color1>>16)&0xff;
+  int g1 = (color1>>8)&0xff;
+  int b1 = color1&0xff;
+  //printf("a1=%d r1=%d g1=%d b1=%d\n",a1,r1,g1,b1);
+  //int a2 = (color2>>24)&0xff;
+  int r2 = (color2>>16)&0xff;
+  int g2 = (color2>>8)&0xff;
+  int b2 = color2&0xff;
+ // printf("a2=%d r2=%d g2=%d b2=%d\n",a2,r2,g2,b2);
+  int draw_a = (color2>>24)&0xff;
+  //int a = a1 * (255-draw_a)/255 + a2 * draw_a/255;
+  int r = r1 * (255-draw_a)/255 + r2 * draw_a/255;
+  //printf("drawa = %d\nr = %d + %d\n",draw_a, r1 * (255-draw_a)/255 , draw_a/255);
+  int g = g1 * (255-draw_a)/255 + g2 * draw_a/255;
+  int b = b1 * (255-draw_a)/255 + b2 * draw_a/255;
+  //printf("a=%d,r=%d,g=%d,b=%d\n",a,r,g,b);
+  return (0xff000000)|(r<<16) | (g<<8)|b;
+}  
+
 /*
  * Return the pixel value at (x, y) 获取像素
  * NOTE: The surface must be locked before calling this!
@@ -349,9 +372,14 @@ void bitmapFree(int bmp)
 void drawPoint(int x,int y,unsigned int color){
     // SDL_SetRenderDrawColor(renderer, (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff, (color >> 24) & 0xff);
     // SDL_RenderDrawPoint(renderer,x,y);
-    uint32 ncolor = (color<<8) | (color>>24);
-    if(x>=0&&y>=0&&x<SCRW&&y<SCRH)
-    put_pixel(surface_cache,x,y,ncolor);
+    // uint32 ncolor = (color<<8) | (color>>24);
+    
+    if(x>=0&&y>=0&&x<SCRW&&y<SCRH){
+        uint32 scolor = get_pixel(surface_cache,x,y);
+        uint32 gcolor = gl_getColor(scolor>>8,color);
+        put_pixel(surface_cache,x,y,gcolor<<8|0xff);
+    }
+    
 }
 
 //画矩形
@@ -363,7 +391,7 @@ void drawRect(int x, int y, int w, int h, unsigned int color)
     for(int ix=0;ix<w;ix++){
         for(int iy=0;iy<h;iy++){
             if(ix>=0&&iy>=0&& ix<SCRW&& iy<SCRH)
-            put_pixel(surface_cache,ix,iy,color);
+            drawPoint(ix,iy,color);
         }
     }
 }
@@ -381,9 +409,9 @@ void drawCircle(int x, int y, int radius, unsigned int color)
     {
         for (i = x - ty; i <= x + ty; ++i)
         {
-            put_pixel(surface_cache, i, y - tx, color);
+            drawPoint( i, y - tx, color);
             if (tx)
-                put_pixel(surface_cache, i, y + tx, color);
+                drawPoint( i, y + tx, color);
         }
         if (d < 0)
             d += (tx << 2) + 6;
@@ -391,8 +419,8 @@ void drawCircle(int x, int y, int radius, unsigned int color)
         {
             for (i = x - tx; i <= x + tx; ++i)
             {
-                put_pixel(surface_cache, i, y - ty, color);
-                put_pixel(surface_cache, i, y + ty, color);
+                drawPoint( i, y - ty, color);
+                drawPoint( i, y + ty, color);
             }
             d += ((tx - ty) << 2) + 10, ty--;
         }
@@ -401,8 +429,8 @@ void drawCircle(int x, int y, int radius, unsigned int color)
     if (tx == ty)
         for (i = x - ty; i <= x + ty; ++i)
         {
-            put_pixel(surface_cache, i, y - tx, color);
-            put_pixel(surface_cache, i, y + tx, color);
+            drawPoint( i, y - tx, color);
+            drawPoint( i, y + tx, color);
         }
     // int en=clock();
     // cout<<"Drawing Circle(radius "<<radius<<" pixels),costs:"<<en-st<<"ms"<<endl;

@@ -141,6 +141,7 @@ unsigned int getuptime();
 void drect(int x,int y,int w,int h,int r,int g,int b);
 void dline(int x1,int x2,int y1,int y2,int r, int g,int b);
 void dpointex(int x,int y,int r,int g,int b);
+int32 effsetcon(int16 x, int16 y, int16 w, int16 h, int16 perr, int16 perg, int16 perb);
 void getscrsize(int *w,int *h);
 void setscrsize(int w,int h);
 void LOG_I(char *text);
