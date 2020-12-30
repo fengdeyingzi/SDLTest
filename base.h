@@ -140,6 +140,10 @@ void sleep(int ms);
 unsigned int getuptime();
 void drect(int x,int y,int w,int h,int r,int g,int b);
 void dline(int x1,int x2,int y1,int y2,int r, int g,int b);
+int textwh(char *pcText, int is_unicode, int font, int* w, int* h);
+int dtext(char *pcText, int x,int y, int r,int g, int b, int is_unicode, int font);
+int dtextex(char *pcText, int x,int y, rectst *rect, colorst *color, int is_unicode, int font);
+
 void dpointex(int x,int y,int r,int g,int b);
 void getscrsize(int *w,int *h);
 void setscrsize(int w,int h);

@@ -5,7 +5,7 @@
             "type": "shell",
             "label": "sdl",
             
-            "command": "E:\\app\\C-free\\mingw\\bin\\gcc.exe",
+            "command": "gcc.exe",
             "args": [
                 "${workspaceFolder}\\main.c",
                 "${workspaceFolder}\\capp.c",
