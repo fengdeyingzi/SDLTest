@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "graphics.h"
-#include <windows.h>
+// #include <windows.h>
 
 #include "capp.h"
 #include "base.h"
@@ -45,6 +45,7 @@
 //     }
 //     return DefWindowProc(hWnd, Msg, wParam, lParam);
 // }
+#ifdef WIN32
 void CreateAndAttachConsole() {
   if (AllocConsole()) {
     freopen("CONOUT$", "w", stdout);
@@ -53,6 +54,7 @@ void CreateAndAttachConsole() {
   //设置控制台编码为UTF-8
   system("CHCP 65001\n");
 }
+#endif
 
 int RINTERVALS = 1000;
 
@@ -64,7 +66,9 @@ SDL_Surface *surface_cache = NULL;
 int main(int argc, char *argv[])
 {
 // MessageBox(NULL,(LPCSTR)"hello world",(LPCSTR)"测试", MB_OK);
+#ifdef WIN32
     CreateAndAttachConsole();
+#endif
     printf("start\n");
     //初始化所有SDL子系统
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)

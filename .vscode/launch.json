@@ -17,6 +17,18 @@
             "preLaunchTask": "sdl"
         },
         {
+            "name": "(Linux) 启动",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}\\main.elf",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "preLaunchTask": "sdl_linux"
+        },
+        {
             "name": "(Windows) test",
             "type": "cppvsdbg",
             "request": "launch",

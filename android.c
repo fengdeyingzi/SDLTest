@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <windows.h>
+// #include <windows.h>
 
 extern SDL_Surface *surface_ui;
 uint32_t toast_end_time;

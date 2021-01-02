@@ -12,7 +12,24 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "E:\\app\\C-free\\mingw\\bin\\gcc.exe",
+            "compilerPath": "gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                
+                "/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "gcc",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"

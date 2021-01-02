@@ -5,7 +5,7 @@
             "type": "shell",
             "label": "sdl",
             
-            "command": "E:\\app\\C-free\\mingw\\bin\\gcc.exe",
+            "command": "gcc",
             "args": [
                 "${workspaceFolder}\\main.c",
                 "${workspaceFolder}\\capp.c",
@@ -37,6 +37,44 @@
             "options": {
                 
                 "cwd": "E:\\app\\C-free\\mingw\\bin\\"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "sdl_linux",
+            
+            "command": "gcc",
+            "args": [
+                "${workspaceFolder}/main.c",
+                "${workspaceFolder}/capp.c",
+                "${workspaceFolder}/base.c",
+                "${workspaceFolder}/graphics.c",
+                "${workspaceFolder}/android.c",
+                "${workspaceFolder}/exb.c",
+                "${workspaceFolder}/encode.c",
+                "-L",
+                "${workspaceFolder}/",
+                "-I",
+                "${workspaceFolder}/",
+                "-std=c99",
+                // "-static",
+                "-o",
+                "${workspaceFolder}/main.elf",
+                "-lSDL2main",
+                "-lSDL2",
+                "-lSDL2_ttf",
+                "-lSDL2_image"
+            ],
+            "options": {
+                
+                "cwd": ""
             },
             "problemMatcher": [
                 "$gcc"
