@@ -45,6 +45,14 @@
 //     }
 //     return DefWindowProc(hWnd, Msg, wParam, lParam);
 // }
+void CreateAndAttachConsole() {
+  if (AllocConsole()) {
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+  }
+  //设置控制台编码为UTF-8
+  system("CHCP 65001\n");
+}
 
 int RINTERVALS = 1000;
 
@@ -56,7 +64,7 @@ SDL_Surface *surface_cache = NULL;
 int main(int argc, char *argv[])
 {
 // MessageBox(NULL,(LPCSTR)"hello world",(LPCSTR)"测试", MB_OK);
-
+    CreateAndAttachConsole();
     printf("start\n");
     //初始化所有SDL子系统
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1)
