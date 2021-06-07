@@ -15,7 +15,11 @@
                 "${workspaceFolder}\\exb.c",
                 "${workspaceFolder}\\encode.c",
                 "-L${workspaceFolder}\\",
+                "-LD:\\app\\mingw64\\bin\\",
+                "-ID:\\app\\mingw64\\include\\SDL2\\",
+                "-ID:\\app\\mingw64\\include\\",
                 "-std=c99",
+                "-gstabs+",
                 "-o",
                 "${workspaceFolder}\\main.exe",
                 "-lmingw32",
@@ -28,12 +32,11 @@
                 "-lSDL2main",
                 "-lSDL2",
                 "-lSDL2_ttf",
-                "-lSDL2_image",
-                "-mwindows"
+                "-lSDL2_image"
             ],
             "options": {
                 
-                "cwd": "E:\\app\\C-free\\mingw\\bin\\"
+                "cwd": "D:\\app\\mingw64\\bin\\"
             },
             "problemMatcher": [
                 "$gcc"

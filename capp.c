@@ -30,12 +30,14 @@ int init()
 // drawLine(point_x, point_y, 30, 30, 0xff202020);
 
 int time = getuptime();
+    printf("fnt_create\n");
     fnt = fnt_create("font.png", "font.fnt");
+    printf("fnt_create ok\n");
     printf(" fnt = %d\n",(int)fnt);
     // fnt_draw(fnt,33,30,30);
     // fnt_draw(fnt,(int)'a',50,30);
     
-    fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
+    // fnt_drawline(fnt,"影子论坛：\nhttp://bbs.yzjlb.net\n\n影子俱乐部网站：\nwww.yzjlb.net\n\n手机C交流QQ群：\n370468001\n╮（╯＿╰）╭\n~~~～",10,10);
     // drawText("测试", 30,30, 1, 0xff30ff30);
     // drawBitmap(fnt->bitmap,0,0);
     printf("耗时：%dms\n",getuptime()-time);

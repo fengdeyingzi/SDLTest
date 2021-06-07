@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <SDL2/SDL.h>
+#include "SDL.h"
 
 //系统版本，由于软件的更新，可能会造成有些函数、宏、类型等不一致而导致运行出错
 //建议在源码中判断系统版本是否相同

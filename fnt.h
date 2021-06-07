@@ -74,14 +74,16 @@ void *fnt_create(char *imgname, char *fntname)
         if (c == '\n')
             line++;
     }
-    fnt->font = malloc(line * 4);
-    memset(fnt->font, 0, line * 4);
+    fnt->font = malloc(line * sizeof(int32));
+    memset(fnt->font, 0, line * sizeof(int32));
     fnt->size = line;
+    printf("size = %d",fnt->size);
     //fnt->bitmap = readBitmapFromAssets(imgname);
 
     for (i = 0; i < len; i++)
     {
         c = *(text + i);
+        // printf("%c",c);
         switch (type)
         {
         case 0: //解析key
@@ -126,15 +128,19 @@ void *fnt_create(char *imgname, char *fntname)
             {
                 if (linetype == 4)
                 {
+                    printf("add1 %d\n",sizeof(_FONT));
                     _FONT *font_temp = malloc(sizeof(_FONT));
+                    printf("add2 \n");
                     memset(font_temp, 0, sizeof(_FONT));
+                    printf("add \n");
                     font_temp->id = font->id;
                     font_temp->x = font->x;
                     font_temp->y = font->y;
                     font_temp->width = font->width;
                     font_temp->height = font->height;
+                    printf("add \n");
                     fnt->font[tempi++] = font_temp;
-                    //printf("添加一个文字：%d\n",font->id);
+                    printf("添加一个文字：%d\n",font->id);
                 }
                 type = 0;
             }
@@ -190,7 +196,7 @@ void *fnt_create(char *imgname, char *fntname)
                 if (strncmp(key, "id", 2) == 0)
                 {
                     font->id = atoi(value);
-                    // printf("id:%d\n", font->id);
+                    printf("id:%d\n", font->id);
                 }
                 if (strncmp(key, "x=", 2) == 0)
                 {
@@ -227,7 +233,7 @@ void *fnt_create(char *imgname, char *fntname)
             break;
         }
     }
-
+    printf("释放\n");
     free(font);
     free(text);
     return fnt;
@@ -249,7 +255,7 @@ void fnt_drawline(_FNT *fnt, char *text, int x, int y)
     {
         id = un[n];
         isdraw = 0;
-        //printf("绘制%x\n",id);
+        printf("绘制%x\n",id);
         for (i = 0; i < fnt->size; i++)
         {
             if (fnt->font[i] != NULL)

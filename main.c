@@ -70,9 +70,13 @@ int main(int argc, char *argv[])
     {
         return -1;    
     }
+    printf("window\n");
+    system("CHCP 65001"); //设置控制台编码为utf-8
     SDL_Window *window = SDL_CreateWindow("SDL测试 - 风的影子", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 480, 720, SDL_WINDOW_SHOWN);
     SDL_Surface *icon = IMG_Load("assets/ic_launcher.png");
+    printf("CreateWindow\n");
     SDL_SetWindowIcon(window, icon);
+    printf("SetWindowIcon\n");
     // SDL_Surface *surface = NULL;
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     
@@ -82,8 +86,11 @@ int main(int argc, char *argv[])
     
     //接下来是获取窗口的屏幕 这样才能绘制
     // surface = SDL_GetWindowSurface(window);
+    printf("SetRenderDrawColor\n");
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    printf("base_init\n");
     base_init(window, renderer);
+    printf("graphics_init\n");
     graphics_init(window, renderer);
     init(); //调用CAPP的init函数
     _TIMER *timer = NULL;
